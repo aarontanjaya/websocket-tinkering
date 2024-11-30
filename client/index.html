@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebSocket Client</title>
+  </head>
+  <body>
+    <h1>WebSocket Client</h1>
+    <button id="connectBtn">Connect to WebSocket</button>
+    <pre id="output"></pre>
+
+    <script>
+      const output = document.getElementById("output");
+      const connectBtn = document.getElementById("connectBtn");
+
+      let ws;
+
+      connectBtn.addEventListener("click", () => {
+        // Connect to the WebSocket server
+        ws = new WebSocket("ws://localhost:8080/ws");
+        // Log when the WebSocket is open
+        ws.onopen = () => {
+          output.textContent += "Connected to WebSocket server\n";
+          ws.send("Hello, WebSocket Server!");
+        };
+
+        // Log incoming messages
+        ws.onmessage = (event) => {
+          output.textContent += `Received: ${event.data}\n`;
+        };
+
+        // Log errors
+        ws.onerror = (error) => {
+          output.textContent += `Error: ${error.message} ${JSON.stringify(
+            error
+          )}\n`;
+          console.log("err", error);
+        };
+
+        // Log when the WebSocket is closed
+        ws.onclose = () => {
+          output.textContent += "Disconnected from WebSocket server\n";
+        };
+      });
+
+      setTimeout(() => {}, 10000000000);
+    </script>
+  </body>
+</html>
